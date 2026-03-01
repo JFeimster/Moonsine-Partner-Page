@@ -1,3 +1,5 @@
+import "./globals.css";
+
 export const metadata = {
   title: "Become a Funding Partner | Earn Daily Commissions | Moonshine Capital",
   description:
