@@ -16,9 +16,7 @@ function clamp(n: number, min: number, max: number) {
 }
 
 function calcCommissionMonthly(dealsPerMonth: number, avgDealSize: number) {
-  // Conservative-feeling estimate: commission scales with deal size but isn’t linear in perception.
-  // You can replace with your true payout math.
-  // Example: commission = avgDealSize * 0.01 * deals (1% of funded amount).
+  // Replace with your real payout math if you want.
   const commissionRate = 0.01;
   return dealsPerMonth * avgDealSize * commissionRate;
 }
@@ -89,7 +87,6 @@ export default function Page() {
   const annual = useMemo(() => monthly * 12, [monthly]);
 
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
-
   const [tier, setTier] = useState<"affiliate" | "agent" | "agency">("agent");
 
   const [form, setForm] = useState({
@@ -110,7 +107,6 @@ export default function Page() {
   }
 
   useEffect(() => {
-    // Exit-intent (desktop): show once.
     const key = "moonshine_exit_shown";
     const already = typeof window !== "undefined" ? localStorage.getItem(key) : "1";
     if (already) return;
@@ -175,7 +171,6 @@ export default function Page() {
             <button
               onClick={() => {
                 track("schedule_call_click");
-                // Replace with Calendly link or modal
                 window.open("https://calendly.com/", "_blank", "noopener,noreferrer");
               }}
               className="hidden rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50 md:inline-flex"
@@ -200,10 +195,16 @@ export default function Page() {
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="relative overflow-hidden">
-        {/* Video background */}
-        <div className="absolute inset-0 -z-10">
+      {/* HERO (fixed fallback background) */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background:
+            "radial-gradient(1200px 600px at 15% 20%, rgba(16,185,129,.22), transparent 55%), radial-gradient(900px 500px at 85% 30%, rgba(245,158,11,.18), transparent 60%), linear-gradient(135deg, rgba(2,6,23,1) 0%, rgba(15,23,42,1) 55%, rgba(3,7,18,1) 100%)",
+        }}
+      >
+        {/* Optional video (can fail; UI still looks good) */}
+        <div className="absolute inset-0 -z-10 opacity-35">
           <video
             className="h-full w-full object-cover"
             autoPlay
@@ -213,16 +214,8 @@ export default function Page() {
             preload="metadata"
             poster="/hero-poster.jpg"
           >
-            {/* Replace with real b-roll */}
             <source src="/hero-loop.mp4" type="video/mp4" />
           </video>
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(90deg, rgba(15,23,42,.92) 0%, rgba(15,23,42,.70) 55%, rgba(15,23,42,.45) 100%)",
-            }}
-          />
         </div>
 
         <div className="mx-auto max-w-6xl px-4 py-14 md:py-20">
@@ -234,12 +227,14 @@ export default function Page() {
               </div>
 
               <h1 className="mt-5 text-4xl font-extrabold tracking-tight text-white md:text-5xl">
-                Build Your Funding Business. <span style={{ color: "#a7f3d0" }}>Earn Daily Commissions.</span>
+                Build Your Funding Business.{" "}
+                <span style={{ color: "#a7f3d0" }}>Earn Daily Commissions.</span>
               </h1>
 
               <p className="mt-4 text-lg text-white/85">
-                Join 500+ independent agents earning <span className="font-semibold text-white">$500–$5K per deal</span>{" "}
-                with <span className="font-semibold text-white">zero upfront costs</span>.
+                Join 500+ independent agents earning{" "}
+                <span className="font-semibold text-white">$500–$5K per deal</span> with{" "}
+                <span className="font-semibold text-white">zero upfront costs</span>.
               </p>
 
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -268,7 +263,6 @@ export default function Page() {
                 </button>
               </div>
 
-              {/* Trust Strip */}
               <div className="mt-7 grid grid-cols-3 gap-2 rounded-2xl border border-white/15 bg-white/10 p-3 text-center text-xs font-semibold text-white/90">
                 <div>Zero Fees</div>
                 <div>Daily Payouts</div>
@@ -276,7 +270,6 @@ export default function Page() {
               </div>
             </div>
 
-            {/* Right column: quick proof + CTA */}
             <div className="rounded-3xl border border-white/15 bg-white/10 p-6 text-white backdrop-blur">
               <div className="text-sm font-semibold text-white/80">What partners like most</div>
               <ul className="mt-3 space-y-2 text-sm text-white/85">
@@ -321,9 +314,7 @@ export default function Page() {
           <div className="grid gap-10 md:grid-cols-2">
             <div>
               <h2 className="text-3xl font-extrabold tracking-tight">Calculate Your Earning Potential</h2>
-              <p className="mt-3 text-slate-600">
-                Slide the numbers. See what consistent deal flow can look like.
-              </p>
+              <p className="mt-3 text-slate-600">Slide the numbers. See what consistent deal flow can look like.</p>
 
               <div className="mt-7 space-y-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div>
@@ -342,7 +333,8 @@ export default function Page() {
                     className="mt-3 w-full"
                   />
                   <div className="mt-1 flex justify-between text-xs text-slate-500">
-                    <span>1</span><span>50</span>
+                    <span>1</span>
+                    <span>50</span>
                   </div>
                 </div>
 
@@ -363,7 +355,8 @@ export default function Page() {
                     className="mt-3 w-full"
                   />
                   <div className="mt-1 flex justify-between text-xs text-slate-500">
-                    <span>$10K</span><span>$500K</span>
+                    <span>$10K</span>
+                    <span>$500K</span>
                   </div>
                 </div>
 
@@ -420,19 +413,22 @@ export default function Page() {
                         </div>
                       </div>
                       {t.featured && (
-                        <div
-                          className="rounded-full px-3 py-1 text-xs font-extrabold text-white"
-                          style={{ backgroundColor: GOLD }}
-                        >
+                        <div className="rounded-full px-3 py-1 text-xs font-extrabold text-white" style={{ backgroundColor: GOLD }}>
                           Recommended
                         </div>
                       )}
                     </div>
 
                     <div className="mt-4 grid gap-2 text-sm text-slate-700">
-                      <div><span className="font-semibold">Time:</span> {t.time}</div>
-                      <div><span className="font-semibold">Best for:</span> {t.bestFor}</div>
-                      <div><span className="font-semibold">What you do:</span> {t.do}</div>
+                      <div>
+                        <span className="font-semibold">Time:</span> {t.time}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Best for:</span> {t.bestFor}
+                      </div>
+                      <div>
+                        <span className="font-semibold">What you do:</span> {t.do}
+                      </div>
                     </div>
 
                     <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -447,9 +443,7 @@ export default function Page() {
                       >
                         {t.cta}
                       </button>
-                      <div className="text-xs text-slate-500">
-                        No fees. Training included.
-                      </div>
+                      <div className="text-xs text-slate-500">No fees. Training included.</div>
                     </div>
                   </div>
                 ))}
@@ -487,7 +481,9 @@ export default function Page() {
               { title: "4) Start Earning", desc: "Submit deals, get paid" },
             ].map((s, idx) => (
               <div key={idx} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-                <div className="text-sm font-extrabold" style={{ color: NAVY }}>{s.title}</div>
+                <div className="text-sm font-extrabold" style={{ color: NAVY }}>
+                  {s.title}
+                </div>
                 <div className="mt-2 text-sm text-slate-600">{s.desc}</div>
               </div>
             ))}
@@ -560,7 +556,9 @@ export default function Page() {
                     <div className="text-sm font-extrabold">{t.name}</div>
                     <div className="text-xs text-slate-500">{t.loc}</div>
                   </div>
-                  <div className="text-sm font-extrabold" style={{ color: GREEN }}>{t.earn}</div>
+                  <div className="text-sm font-extrabold" style={{ color: GREEN }}>
+                    {t.earn}
+                  </div>
                 </div>
                 <div className="mt-4 text-sm text-slate-700">“{t.quote}”</div>
                 <button
@@ -585,7 +583,9 @@ export default function Page() {
           <h2 className="text-3xl font-extrabold tracking-tight">Do You Qualify?</h2>
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
-              <div className="text-sm font-extrabold" style={{ color: GREEN }}>✅ What we’re looking for</div>
+              <div className="text-sm font-extrabold" style={{ color: GREEN }}>
+                ✅ What we’re looking for
+              </div>
               <ul className="mt-4 space-y-2 text-sm text-slate-700">
                 <li>• Age 18+ (21+ in some states)</li>
                 <li>• Willingness to learn</li>
@@ -626,10 +626,7 @@ export default function Page() {
                     className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                   >
                     <div className="text-sm font-extrabold text-slate-900">{f.q}</div>
-                    <div
-                      className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-700"
-                      aria-hidden
-                    >
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-700" aria-hidden>
                       {open ? "–" : "+"}
                     </div>
                   </button>
@@ -647,12 +644,12 @@ export default function Page() {
           <div className="grid gap-10 md:grid-cols-2">
             <div>
               <h2 className="text-3xl font-extrabold tracking-tight">Your Application Takes 2 Minutes</h2>
-              <p className="mt-3 text-slate-600">
-                Submit once. We review within 24–48 hours. Training unlocks immediately after approval.
-              </p>
+              <p className="mt-3 text-slate-600">Submit once. We review within 24–48 hours. Training unlocks immediately after approval.</p>
 
               <div className="mt-7 rounded-3xl border border-slate-200 bg-slate-50 p-6">
-                <div className="text-sm font-extrabold" style={{ color: NAVY }}>What you’ll submit</div>
+                <div className="text-sm font-extrabold" style={{ color: NAVY }}>
+                  What you’ll submit
+                </div>
                 <ul className="mt-4 space-y-2 text-sm text-slate-700">
                   <li>• Full name</li>
                   <li>• Email</li>
@@ -682,9 +679,7 @@ export default function Page() {
                 >
                   Schedule Call with Recruiter
                 </button>
-                <div className="text-xs text-slate-500 sm:self-center">
-                  Want a quick walkthrough? Book a call.
-                </div>
+                <div className="text-xs text-slate-500 sm:self-center">Want a quick walkthrough? Book a call.</div>
               </div>
             </div>
 
@@ -762,9 +757,7 @@ export default function Page() {
                         key={o.id}
                         onClick={() => setTier(o.id as any)}
                         className={`rounded-xl px-3 py-2 text-xs font-extrabold transition ${
-                          tier === (o.id as any)
-                            ? "text-white"
-                            : "border border-slate-300 bg-white text-slate-900"
+                          tier === (o.id as any) ? "text-white" : "border border-slate-300 bg-white text-slate-900"
                         }`}
                         style={tier === (o.id as any) ? { backgroundColor: NAVY } : {}}
                       >
@@ -816,15 +809,11 @@ export default function Page() {
             </div>
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
               <div className="text-sm font-extrabold">Funding Partners</div>
-              <div className="mt-3 text-sm text-slate-700">
-                Add logos here (e.g., David Allen Capital, etc.)
-              </div>
+              <div className="mt-3 text-sm text-slate-700">Add logos here (e.g., David Allen Capital, etc.)</div>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-slate-50 p-6">
               <div className="text-sm font-extrabold">Final push</div>
-              <div className="mt-3 text-sm text-slate-700">
-                Your financial freedom starts when you stop waiting.
-              </div>
+              <div className="mt-3 text-sm text-slate-700">Your financial freedom starts when you stop waiting.</div>
               <button
                 onClick={() => {
                   track("cta_primary_click", { location: "footer" });
@@ -838,9 +827,7 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="mt-10 text-xs text-slate-500">
-            © {new Date().getFullYear()} Moonshine Capital • distilledfunding.com
-          </div>
+          <div className="mt-10 text-xs text-slate-500">© {new Date().getFullYear()} Moonshine Capital • distilledfunding.com</div>
         </div>
       </footer>
 
@@ -858,7 +845,6 @@ export default function Page() {
               </button>
             </div>
             <div className="aspect-video bg-black">
-              {/* Replace with Vimeo/YouTube embed if desired */}
               <iframe
                 className="h-full w-full"
                 src="https://www.youtube.com/embed/dQw4w9WgXcQ"
@@ -914,15 +900,10 @@ export default function Page() {
               </button>
             </div>
 
-            <div className="mt-4 text-xs text-slate-500">
-              Optional: swap this for a “Free Guide” lead magnet if you want warmer leads.
-            </div>
+            <div className="mt-4 text-xs text-slate-500">Optional: swap this for a “Free Guide” lead magnet if you want warmer leads.</div>
           </div>
         </div>
       )}
-
-      {/* Chat widget placeholder */}
-      {/* Add Crisp/Intercom script in layout.tsx or a dedicated component when ready */}
     </div>
   );
 }
